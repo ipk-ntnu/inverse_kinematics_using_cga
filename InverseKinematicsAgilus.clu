@@ -1,3 +1,11 @@
+/*
+ * This file is used to show the inverse kinematics for the Agilus robot
+ * The mathematics is described in 
+ * "Inverse Kinematics for Industrial Robots using Conformal Geometric Algebra"
+ * by A. Kleppe and O. Egeland
+ *
+ * Created by Adam Leon Kleppe
+ */
 DefVarsN3();
 // Agilus Denavit-Hartenberg parameters
 agilus_parameters = 
@@ -96,7 +104,7 @@ ik_agilus =
 	C_2 = (S_1*)^(S_w*);
 	Q_2 = C_2.P_c;
 	
-	X_2 = (Q_2 + k(1)*sqrt(abs(Q_2.Q_2))) / (-einf.Q_2);
+	X_2 = (Q_2 - k(1)*sqrt(abs(Q_2.Q_2))) / (-einf.Q_2);
 	
 	// Section 4.3: Calculating the remaining kinematics
 	S_2 = SphereN3(X_2, param(3)(2));
@@ -104,13 +112,13 @@ ik_agilus =
 	C_wx = K_w^(S_2*);
 	Q_wx = C_wx.P_c;
 	
-	P_12c = X_2^X_w^(P_c*)^einf;
+	P_2wc = X_2^X_w^(P_c*)^einf;
 	
 	
 	X_wxp = (Q_wx + sqrt(abs(Q_wx.Q_wx))) / (-einf.Q_wx);
 	X_wxm = (Q_wx - sqrt(abs(Q_wx.Q_wx))) / (-einf.Q_wx);
 
-	if((k(3)*X_wxp.(P_12c*)) > 0)
+	if((k(3)*X_wxp.(P_2wc*)) > 0)
 		X_wx = X_wxp;
 	else
 		X_wx = X_wxm;
